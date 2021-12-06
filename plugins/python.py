@@ -10,6 +10,7 @@ import sys
 def user_exec(client: Client, message: Message):
     reply = message.reply_to_message
     print(reply)
+    print(reply.text)
     code = ""
     try:
         code = reply.text.split(" ", maxsplit=1)[1]
