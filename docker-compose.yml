@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+  bot:
+    image: "userbot"
+    container_name: "userbot"
+    build:
+      context: .
+    working_dir: "/usr/src/app/userbot"
+    volumes:
+    - .:/usr/src/app/userbot
+    command: python3 -m main
+    restart: always
