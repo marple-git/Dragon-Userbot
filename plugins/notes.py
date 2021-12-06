@@ -12,7 +12,7 @@ from .utils.db import db
 
 @Client.on_message(filters.command(["save"], prefix) & filters.me)
 async def save_note(client: Client, message: Message):
-    await message.edit("<code>Loading...</code>")
+    await message.edit("<code>Загрузка...</code>")
 
     async def chat_id():
         cid = db.get("core.notes", "chat_id")

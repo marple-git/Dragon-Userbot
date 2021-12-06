@@ -12,7 +12,7 @@ async def afk_handler(client, message):
         afk_time = end - start
         if message.from_user.is_bot is False:
             await message.reply_text(
-                f"<b>I afk {afk_time}</b>\n" f"<b>Reason:</b> <i>{reason}</i>"
+                f"<b>Я ушёл в афк {afk_time}</b>\n" f"<b>Причина:</b> <i>{reason}</i>"
             )
     except NameError:
         pass
@@ -29,7 +29,7 @@ async def afk(client, message):
         reason = message.text.split(" ", maxsplit=1)[1]
     else:
         reason = "None"
-    await message.edit("<b>I'm going afk</b>")
+    await message.edit("<b>Я ухожу в афк</b>")
 
 
 @Client.on_message(filters.command("unafk", prefix) & filters.me)
@@ -38,14 +38,14 @@ async def unafk(client, message):
         global start, end
         end = datetime.datetime.now().replace(microsecond=0)
         afk_time = end - start
-        await message.edit(f"<b>I'm not AFK anymore.\nI was afk {afk_time}</b>")
+        await message.edit(f"<b>Я вышел из афк.\nЯ был афк на протяжении {afk_time}</b>")
         client.remove_handler(*handler)
     except NameError:
-        await message.edit("<b>You weren't afk</b>")
+        await message.edit("<b>Ты не афк</b>")
         await asyncio.sleep(3)
         await message.delete()
 
 
 modules_help.append(
-    {"afk": [{"afk [reason]": "Go to afk"}, {"unafk": "Get out of AFK"}]}
+    {"afk": [{"afk [reason]": "АФК"}, {"unafk": "Из афк"}]}
 )

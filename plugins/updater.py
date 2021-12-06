@@ -8,10 +8,7 @@ import os
 
 
 async def restart(message: Message, restart_type):
-    if restart_type == "update":
-        text = "1"
-    else:
-        text = "2"
+    text = "1" if restart_type == "update" else "2"
     await os.execvp(
         "python3",
         [
@@ -26,13 +23,13 @@ async def restart(message: Message, restart_type):
 
 @Client.on_message(filters.command("restart", prefix) & filters.me)
 async def restart_comand(client: Client, message: Message):
-    await message.edit("<code>Restarting...</code>")
+    await message.edit("<code>Перезагрузка...</code>")
     await restart(message, restart_type="restart")
 
 
 @Client.on_message(filters.command("update", prefix) & filters.me)
 async def update(client: Client, message: Message):
-    await message.edit("<code>Updating...</code>")
+    await message.edit("<code>Обновление...</code>")
     pip_update = subprocess.Popen(
         ["python3", "-m", "pip", "install", "--upgrade", "pip"], stdout=subprocess.PIPE
     )
@@ -46,7 +43,7 @@ async def update(client: Client, message: Message):
         )
         output = process.communicate()[0]
         print(output)
-    await message.edit("<code>Restarting...</code>")
+    await message.edit("<code>Перезагрузка...</code>")
     await restart(message, restart_type="update")
 
 

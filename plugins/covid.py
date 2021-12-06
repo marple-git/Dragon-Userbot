@@ -15,25 +15,25 @@ async def covid_local(client: Client, message: Message):
         local_status = covid.get_status_by_country_name(region)
         await message.edit(
             "<b>=======🦠 COVID-19 STATUS 🦠=======</b>\n"
-            + f"<b>Region</b>: <code>{local_status['country']}</code>\n"
+            + f"<b>Регион</b>: <code>{local_status['country']}</code>\n"
             + "<b>====================================</b>\n"
-            + f"<b>🤧 New cases</b>: <code>{local_status['new_cases']}</code>\n"
-            + f"<b>😷 New deaths</b>: <code>{local_status['new_deaths']}</code>\n"
+            + f"<b>🤧 Новых случаев</b>: <code>{local_status['new_cases']}</code>\n"
+            + f"<b>😷 Новых смертей</b>: <code>{local_status['new_deaths']}</code>\n"
             + "<b>====================================</b>\n"
-            + f"<b>😷 Сonfirmed</b>: <code>{local_status['confirmed']}</code>\n"
-            + f"<b>❗️ Active:</b> <code>{local_status['active']}</code>\n"
-            + f"<b>⚠️ Critical</b>: <code>{local_status['critical']}</code>\n"
-            + f"<b>💀 Deaths</b>: <code>{local_status['deaths']}</code>\n"
-            + f"<b>🚑 Recovered</b>: <code>{local_status['recovered']}</code>\n"
+            + f"<b>😷 Подтверждено</b>: <code>{local_status['confirmed']}</code>\n"
+            + f"<b>❗️ Активно:</b> <code>{local_status['active']}</code>\n"
+            + f"<b>⚠️ Критичные</b>: <code>{local_status['critical']}</code>\n"
+            + f"<b>💀 Смерти</b>: <code>{local_status['deaths']}</code>\n"
+            + f"<b>🚑 Излечение</b>: <code>{local_status['recovered']}</code>\n"
         )
     except ValueError:
-        await message.edit(f'<code>There is no region called "{region}"</code>')
+        await message.edit(f'<code>Нет региона "{region}"</code>')
 
 
 @Client.on_message(filters.command("regions", prefix) & filters.me)
 async def regions(client: Client, message: Message):
     countr = ""
-    await message.edit("<code>Data retrieval...</code>")
+    await message.edit("<code>Получение данных...</code>")
     covid = Covid(source="worldometers")
     regions = covid.list_countries()
     for region in regions:
@@ -45,7 +45,7 @@ async def regions(client: Client, message: Message):
 modules_help.append(
     {
         "covid": [
-            {"covid [region]*": "Status by region"},
+            {"covid [region]*": "Получить статистику"},
             {
                 "regions": "Available regions]\n=======================\n[Worldometer.info statistics are used"
             },

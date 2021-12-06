@@ -27,7 +27,7 @@ modules_help.append(
     {
         "screenshot": [
             {
-                "scr [amount of screenshots]": "Take a screenshot\nThis only works in private messages!"
+                "scr [amount of screenshots]": "Сделать фейковый скриншот(только в лс)"
             }
         ]
     }

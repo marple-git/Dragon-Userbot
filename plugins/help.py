@@ -32,7 +32,7 @@ async def help(client, message: Message):
             else:
                 msg_cnt += 1
                 messages.append(help_message)
-        tc = """\nThe number of modules in the userbot: """ + str(float(len(modules_help)))
+        tc = """\nКоличество модулей: """ + str(float(len(modules_help)))
         if len(messages[msg_cnt] + tc) < 2048:
             messages[msg_cnt] += tc
         else:
@@ -44,7 +44,7 @@ async def help(client, message: Message):
         for msg in messages:
             await message.reply(msg, parse_mode="HTML", disable_web_page_preview=True)
     else:
-        text = f"<b>Help for <i>{module_name}</i>\n\nUsage:</b>\n"
+        text = f""
         found = False
         for mh in modules_help:
             if list(mh.keys())[0].lower() == module_name.lower():
@@ -56,9 +56,9 @@ async def help(client, message: Message):
         if found:
             await message.edit(text, parse_mode="HTML")
         else:
-            await message.edit(f"<b>Module <i>{module_name}</i> not found!</b>")
+            await message.edit(f"<b>Модуль <i>{module_name}</i> не найден!</b>")
 
 
 modules_help.append(
-    {"help": [{"help [module name]": "To get help. Module name isn't required."}]}
+    {"help": [{"help [module name]": "Помощь"}]}
 )

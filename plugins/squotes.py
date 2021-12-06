@@ -40,9 +40,9 @@ async def quote_cmd(client: Client, message: types.Message):
 
     if send_for_me:
         await message.delete()
-        message = await client.send_message("me", "<b>Generating...</b>")
+        message = await client.send_message("me", "<b>Генерирую...</b>")
     else:
-        await message.edit("<b>Generating...</b>")
+        await message.edit("<b>Генерирую...</b>")
 
     url = "https://quotes.fl1yd.su/generate"
     params = {
@@ -60,11 +60,7 @@ async def quote_cmd(client: Client, message: types.Message):
         )
 
     file_io = BytesIO(response.content)
-    if is_png:
-        file_io.name = "sticker.png"
-    else:
-        file_io.name = "sticker.webp"
-
+    file_io.name = "sticker.png" if is_png else "sticker.webp"
     await message.edit("<b>Sending...</b>")
 
     try:
@@ -95,7 +91,7 @@ async def fake_quote_cmd(client: Client, message: types.Message):
     )
 
     if not fake_quote_text:
-        return await message.edit("<b>Fake quote text is empty</b>")
+        return await message.edit("<b>Укажите текст</b>")
 
     q_message = await client.get_messages(
         message.chat.id, message.reply_to_message.message_id
@@ -107,9 +103,9 @@ async def fake_quote_cmd(client: Client, message: types.Message):
 
     if send_for_me:
         await message.delete()
-        message = await client.send_message("me", "<b>Generating...</b>")
+        message = await client.send_message("me", "<b>Генерирую...</b>")
     else:
-        await message.edit("<b>Generating...</b>")
+        await message.edit("<b>Генерирую...</b>")
 
     url = "https://quotes.fl1yd.su/generate"
     params = {

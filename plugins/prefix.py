@@ -13,17 +13,17 @@ async def pref(client: Client, message: Message):
         prefix = message.command[1]
         print(message.command)
         db.set("core.main", "prefix", prefix)
-        await message.edit(f"<b>Prefix [ <code>{prefix}</code> ] is set!</b>")
+        await message.edit(f"<b>Префикс [ <code>{prefix}</code> ] установлен!</b>")
         await restart()
     else:
-        await message.edit("<b>The prefix must not be empty!</b>")
+        await message.edit("<b>Префикс не может быть пустым!</b>")
 
 
 modules_help.append(
     {
         "prefix": [
-            {"setprefix [prefix]*": "Set custom prefix"},
-            {"setprefix_dragon [prefix]*": "Set custom prefix"},
+            {"setprefix [prefix]*": "Установить кастомный префикс"},
+            {"setprefix_dragon [prefix]*": "Установить кастомный префикс"},
         ]
     }
 )

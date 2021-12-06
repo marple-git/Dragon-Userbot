@@ -35,9 +35,9 @@ async def ownlist(client: Client, message: Message):
                         }
                     )
 
-        adminned_chats = "<b>Adminned chats:</b>\n"
-        owned_chats = "<b>Owned chats:</b>\n"
-        owned_chats_with_username = "<b>Owned chats with username:</b>\n"
+        adminned_chats = "<b>Админ в чатах:</b>\n"
+        owned_chats = "<b>Владелец чатов:</b>\n"
+        owned_chats_with_username = "<b>Владелец чатов с юзернеймом:</b>\n"
 
         c_adminned_chats = 0
         c_owned_chats = 0
@@ -53,7 +53,7 @@ async def ownlist(client: Client, message: Message):
             elif chat["role"] == "administrator":
                 c_adminned_chats += 1
                 adminned_chats += f'{c_adminned_chats}. <a href="{chat["link"]}">{t(chat["chat_name"])}</a>\n'
-        stats = f"<b><u>Total:</u></b> {len(chatlist)}\n<b><u>Adminned chats:</u></b> {c_adminned_chats}\n<b><u>Owned chats:</u></b> {c_owned_chats}\n<b><u>Owned chats with username:</u></b> {c_owned_chats_with_username}"
+        stats = f"<b><u>Всего:</u></b> {len(chatlist)}\n<b><u>Админ в чатах:</u></b> {c_adminned_chats}\n<b><u>Владелец в чатах:</u></b> {c_owned_chats}\n<b><u>Владелец в чатах с юзернеймом:</u></b> {c_owned_chats_with_username}"
         tstop = perf_counter()
         await message.edit(
             adminned_chats
@@ -75,4 +75,4 @@ async def ownlist(client: Client, message: Message):
         )
 
 
-modules_help.append({"admlist": [{"admlist": "Get adminned and owned chats"}]})
+modules_help.append({"admlist": [{"admlist": "Получить чаты где ты админ"}]})

@@ -61,8 +61,8 @@ async def ban_command(client: Client, message: Message):
                     if _.lower() != "delete_history" and _.lower() != "report_spam":
                         text_c += f" {_}"
                 await message.edit(
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>banned!</code>"
-                    + f"\n{'<b>Cause:</b> <i>' + text_c.split(maxsplit=1)[1] + '</i>' if len(text_c.split()) > 1 else ''}"
+                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>заблокирован!</code>"
+                    + f"\n{'<b>Причина:</b> <i>' + text_c.split(maxsplit=1)[1] + '</i>' if len(text_c.split()) > 1 else ''}"
                 )
             except UserAdminInvalid:
                 await message.edit("<b>No rights</b>")
@@ -83,8 +83,8 @@ async def ban_command(client: Client, message: Message):
                 try:
                     await client.kick_chat_member(message.chat.id, user_to_ban.id)
                     await message.edit(
-                        f"<b>{user_to_ban.first_name}</b> <code>banned!</code>"
-                        + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                        f"<b>{user_to_ban.first_name}</b> <code>Заблокирован!</code>"
+                        + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
                     await message.edit("<b>No rights</b>")
@@ -115,8 +115,8 @@ async def unban_command(client: Client, message: Message):
                     message.chat.id, message.reply_to_message.from_user.id
                 )
                 await message.edit(
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>unbanned!</code>"
-                    + f"\n{'<b>Cause:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
+                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>разблокирован!</code>"
+                    + f"\n{'<b>Причина:</b> <i>' + cause.split(maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
             except UserAdminInvalid:
                 await message.edit("<b>No rights</b>")
@@ -137,8 +137,8 @@ async def unban_command(client: Client, message: Message):
                 try:
                     await client.unban_chat_member(message.chat.id, user_to_unban.id)
                     await message.edit(
-                        f"<b>{user_to_unban.first_name}</b> <code>unbanned!</code>"
-                        + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                        f"<b>{user_to_unban.first_name}</b> <code>Разблокирован</code>"
+                        + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
                     await message.edit("<b>No rights</b>")
@@ -194,8 +194,8 @@ async def kick_command(client: Client, message: Message):
                     if _.lower() != "delete_history" and _.lower() != "report_spam":
                         text_c += f" {_}"
                 await message.edit(
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>kicked!</code>"
-                    + f"\n{'<b>Cause:</b> <i>' + text_c.split(maxsplit=1)[1] + '</i>' if len(text_c.split()) > 1 else ''}"
+                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>кикнут!</code>"
+                    + f"\n{'<b>Причина:</b> <i>' + text_c.split(maxsplit=1)[1] + '</i>' if len(text_c.split()) > 1 else ''}"
                 )
             except UserAdminInvalid:
                 await message.edit("<b>No rights</b>")
@@ -217,8 +217,8 @@ async def kick_command(client: Client, message: Message):
                     await client.kick_chat_member(message.chat.id, user_to_ban.id)
                     await client.unban_chat_member(message.chat.id, user_to_ban.id)
                     await message.edit(
-                        f"<b>{user_to_ban.first_name}</b> <code>kicked!</code>"
-                        + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                        f"<b>{user_to_ban.first_name}</b> <code>кикнут!</code>"
+                        + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
                     await message.edit("<b>No rights</b>")

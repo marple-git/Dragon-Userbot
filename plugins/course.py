@@ -13,7 +13,7 @@ headers = {
 @Client.on_message(filters.command("course", prefix) & filters.me)
 async def convert(client: Client, message: Message):
     try:
-        await message.edit("<code>Data retrieval...</code>")
+        await message.edit("<code>Получение данных...</code>")
         name = message.command[1]
 
         if name == "btc":
@@ -25,7 +25,7 @@ async def convert(client: Client, message: Message):
         full_page = requests.get(link, headers=headers, timeout=3)
         soup = BeautifulSoup(full_page.content, "html.parser")
         rub = soup.find("span", id="last_last")
-        await message.edit(f"<b>{name} now is </b><code> {rub} </code><b> rub</b>")
+        await message.edit(f"<b>{name} сейчас стоит </b><code> {rub} </code><b> руб</b>")
     except:
         await message.edit("<code>ERROR</code>")
 
@@ -34,7 +34,7 @@ modules_help.append(
     {
         "course": [
             {
-                "course [currency]*": "Transfer from any state currency to the ruble\nDont use more than 10 times per minute"
+                "course [currency]*": "Конвертен в рубли из любой валюты\nНе использовать чаще 10 раз в минуту"
             }
         ]
     }

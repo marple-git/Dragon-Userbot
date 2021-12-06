@@ -10,7 +10,7 @@ from io import BytesIO
 async def tts(client: Client, message: Message):
     lang = message.command[1]
     text = " ".join(message.command[2:])
-    await message.edit("<code>Speech synthesis...</code>")
+    await message.edit("<code>Синтезирую речь...</code>")
     tts = gTTS(text, lang=lang)
     voice = BytesIO()
     tts.write_to_fp(voice)
@@ -26,4 +26,4 @@ async def tts(client: Client, message: Message):
         await client.send_audio(message.chat.id, voice)
 
 
-modules_help.append({"tts": [{"tts [lang]* [text]*": "Say text"}]})
+modules_help.append({"tts": [{"tts [lang]* [text]*": "Сказать текст"}]})

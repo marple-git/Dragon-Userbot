@@ -32,43 +32,43 @@ async def anti_pm_handler(client: Client, message: Message):
 async def anti_pm(client: Client, message: Message):
     status = db.get("core.antipm", "status", False)
     if status:
-        await message.edit("Anti-pm enabled")
+        await message.edit("Анти-пм включен")
         my_handler = MessageHandler(anti_pm_handler, filters.private)
         client.add_handler(my_handler)
     else:
         db.set("core.antipm", "status", True)
         my_handler = MessageHandler(anti_pm_handler, filters.private)
         client.add_handler(my_handler)
-        await message.edit("Anti-pm enabled")
+        await message.edit("Анти-пм включен")
 
 
 @Client.on_message(filters.command(["disable_anti_pm"], prefix) & filters.me)
 async def disable_anti_pm(client: Client, message: Message):
     db.set("core.antipm", "status", False)
-    await message.edit("Anti-pm disabled")
+    await message.edit("Анти-пм выключен")
 
 
 @Client.on_message(filters.command(["esr"], prefix) & filters.me)
 async def esr(client: Client, message: Message):
     db.set("core.antipm", "spamrep", True)
-    await message.edit("Spam-reporting enabled")
+    await message.edit("Спам репортами включен")
 
 
 @Client.on_message(filters.command(["dsr"], prefix) & filters.me)
 async def dsr(client: Client, message: Message):
     db.set("core.antipm", "spamrep", False)
-    await message.edit("Spam-reporting disabled")
+    await message.edit("Спам репортами выключен")
 
 
 modules_help.append(
     {
         "antipm": [
             {
-                "anti_pm": "Delete all messages from users who are not in the contact book"
+                "anti_pm": "Удалить все сообщения от юзеров которых нет в контактах"
             },
-            {"disable_anti_pm": "Disable"},
-            {"esr": "Enable spam report"},
-            {"dsr": "Disable spam report"},
+            {"disable_anti_pm": "Выключить"},
+            {"esr": "Включить спам репорт"},
+            {"dsr": "Выключить спам репорт"},
         ]
     }
 )

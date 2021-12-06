@@ -29,7 +29,7 @@ def get_pic(city):
 async def weather(client: Client, message: Message):
     try:
         city = message.command[1]
-        await message.edit("```Processing the request...```")
+        await message.edit("```Ожидайте...```")
         r = requests.get(f"https://wttr.in/{city}?m?M?0?q?T&lang=en")
         await message.edit(f"```City: {r.text}```")
         await client.send_document(
@@ -39,7 +39,7 @@ async def weather(client: Client, message: Message):
         )
         os.remove(f"{city}.png")
     except:
-        await message.edit("<code>Error occured</code>")
+        await message.edit("<code>Произошла ошибка</code>")
         await asyncio.sleep(5)
         await message.delete()
 

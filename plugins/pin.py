@@ -8,13 +8,13 @@ async def pin(client: Client, message: Message):
     try:
         message_id = message.reply_to_message.message_id
         await client.pin_chat_message(message.chat.id, message_id)
-        await message.edit("<code>Pinned successfully! </code>")
+        await message.edit("<code>Успешно закреплено! </code>")
     except:
         await message.edit(
-            "<b>[Reply to the message you want to pin]\n[Does not work in private messages!]</b>"
+            "<b>[Ответьте на сообщение которое хотите закрепить]\n</b>"
         )
 
 
 modules_help.append(
-    {"pin": [{"pin": "Pin any message\nReply to the message you want to pin"}]}
+    {"pin": [{"pin": "Закрепить сообщение"}]}
 )
