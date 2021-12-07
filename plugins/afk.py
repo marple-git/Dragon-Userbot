@@ -47,5 +47,5 @@ async def unafk(client, message):
 
 
 modules_help.append(
-    {"afk": [{"afk [reason]": "АФК"}, {"unafk": "Из афк"}]}
+    {"afk": [{"afk [причина]": "АФК"}, {"unafk": "Из афк"}]}
 )

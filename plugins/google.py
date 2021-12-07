@@ -29,7 +29,7 @@ modules_help.append(
     {
         "google": [
             {
-                "google [request]": "To teach the interlocutor to use Google. Request isn't required."
+                "google [запрос]": "Научить пользователя гуглить"
             }
         ]
     }

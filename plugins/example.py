@@ -22,14 +22,3 @@ async def example_send(client: Client, message: Message):
 modules_help.append(
     {"example": [{"example_send": "example send"}, {"example_edit": "example edit"}]}
 )
-#'module_name': '''comand_1 - description, comand_2 - description''',
-#        │          'module_name module': 'Example send: example_send, example_edit\n\n'
-#        │                 │        │
-#        │                 │        │
-#     module_name(only snake_case)  └─ module (here the word 'module' is required)
-
-
-# If your custom module requires packages from PyPi, write the names of the packages in these functions
-# requirements_list.append('example_1')
-# requirements_list.append('example_2')
-# etc

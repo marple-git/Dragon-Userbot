@@ -23,11 +23,10 @@ async def purge(client: Client, message: Message):
             reverse=True,
         ):
             messages_to_purge.append(msg.message_id)
-    not_deleted_messages = []
     for msgs in [
         messages_to_purge[i : i + 100] for i in range(0, len(messages_to_purge), 100)
     ]:
-        res = await client.delete_messages(message.chat.id, msgs)
+        await client.delete_messages(message.chat.id, msgs)
         await asyncio.sleep(1)
         msg = await client.send_message(
             message.chat.id,

@@ -12,8 +12,8 @@ import asyncio
 async def sendmod(client: Client, message: Message):
     module_name = message.command[1]
     try:
-        await message.edit("<code>Dispatch...</code>")
-        text = f"<b>Help for <i>{module_name}</i>\n\nUsage:</b>\n"
+        await message.edit("<code>Отправляю...</code>")
+        text = f"<b>Помощь по модулю <i>{module_name}</i>\n\nИспользование:</b>\n"
         found = False
         for mh in modules_help:
             if list(mh.keys())[0].lower() == module_name.lower():
@@ -23,7 +23,7 @@ async def sendmod(client: Client, message: Message):
                     cmd = list(u_cmd.items())[0]
                     text += f"""<code>{prefix + cmd[0]}</code> - <i>{cmd[1]}</i>\n"""
         if not found:
-            text = "<b>Module <i>{module_name}</i> not found!</b>"
+            text = "<b>Модуль <i>{module_name}</i> не найден!</b>"
 
         if os.path.isfile(f"plugins/{module_name.lower()}.py"):
             await client.send_document(
@@ -35,7 +35,7 @@ async def sendmod(client: Client, message: Message):
             )
         await message.delete()
     except:
-        await message.edit("<b>Invalid module name!</b>")
+        await message.edit("<b>Неверное имя модуля!</b>")
         await asyncio.sleep(5)
         await message.delete()
 
@@ -43,7 +43,7 @@ async def sendmod(client: Client, message: Message):
 modules_help.append(
     {
         "sendmod": [
-            {"sendmod [module name]*": "Send one of the modules to the interlocutor"}
+            {"sendmod [название модуля]*": "Отправить один из модулей собеседнику"}
         ]
     }
 )

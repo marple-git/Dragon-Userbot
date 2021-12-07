@@ -15,11 +15,11 @@ async def get_mod_hash(client: Client, message: Message):
     resp = requests.get(url)
     if not resp.ok:
         await message.edit(
-            f"<b>Troubleshooting with downloading module <code>{url}</code></b>"
+            f"<b>Произошла ошибка во время скачивания модуля <code>{url}</code></b>"
         )
         return
     await message.edit(
-        f"<b>Module hash: <code>{hashlib.sha256(resp.content).hexdigest()}</code></b>"
+        f"<b>Hash модуля: <code>{hashlib.sha256(resp.content).hexdigest()}</code></b>"
     )
 
 
@@ -35,13 +35,13 @@ async def load_mods(client: Client, message: Message):
         code = requests.get(url) if content is None else content
         if not code.ok:
             await message.edit(
-                f'<b>Can\'t find module <code>{url.split("/")[-1].split(".")[0]}</code></b>'
+                f'<b>Не могу найти модуль <code>{url.split("/")[-1].split(".")[0]}</code></b>'
             )
             return
         with open(f'./plugins/custom_modules/{url.split("/")[-1]}', "wb") as mod:
             mod.write(code.content)
         await message.edit(
-            f'<b>The module <code>{url.split("/")[-1].split(".")[0]}</code> is loaded!</b>'
+            f'<b>Модуль <code>{url.split("/")[-1].split(".")[0]}</code> загружен!</b>'
         )
         await restart()
 
@@ -57,7 +57,7 @@ async def load_mods(client: Client, message: Message):
         resp = requests.get(url)
         if not resp.ok:
             await message.edit(
-                f"<b>Troubleshooting with downloading module <code>{url}</code></b>"
+                f"<b>Произошла ошибка во время скачивания модуля <code>{url}</code></b>"
             )
             return
         hashes = requests.get(
@@ -67,42 +67,44 @@ async def load_mods(client: Client, message: Message):
             await download_mod(resp)
         else:
             await message.edit(
-                "<b>Only <a href=https://github.com/Dragon-Userbot/custom_modules/main/modules_hashes.txt>verified"
-                "</a> modules or from the official <a href=https://github.com/Dragon-Userbot/custom_modules>"
-                "custom_modules</a> repository are supported!</b>",
+                "<b>Разрешены только <a href=https://github.com/Dragon-Userbot/custom_modules/main/modules_hashes.txt>официальные"
+                "</a> модули или модули из <a href=https://github.com/Dragon-Userbot/custom_modules>"
+                "репозитория с кастомными модулями</a></b>",
                 disable_web_page_preview=True,
             )
 
 
 @Client.on_message(filters.command(["unloadmod", "ulm"], prefix) & filters.me)
 async def unload_mods(client: Client, message: Message):
-    if len(message.command) > 1:
-        mod = message.command[1]
-        if (
-            "/".join(mod.split("/")[:6])
-            == "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main"
-        ):
-            mod = "/".join(mod.split("/")[6:]).split(".")[0]
+    if len(message.command) <= 1:
+        return
+    mod = message.command[1]
+    if (
+        "/".join(mod.split("/")[:6])
+        == "https://raw.githubusercontent.com/Dragon-Userbot/custom_modules/main"
+    ):
+        mod = "/".join(mod.split("/")[6:]).split(".")[0]
 
-        if os.path.exists(
+    if os.path.exists(
             f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py"
         ):
-            os.remove(f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py")
-            await message.edit(f"<b>The module <code>{mod}</code> removed!</b>")
-            await restart()
+        os.remove(f"{os.path.abspath(os.getcwd())}/plugins/custom_modules/{mod}.py")
+        await message.edit(f"<b>Модуль <code>{mod}</code> удалён!</b>")
+        await restart()
 
-        elif os.path.exists(f"{os.path.abspath(os.getcwd())}/plugins/{mod}.py"):
-            await message.edit(
-                f"<b>It is forbidden to remove built-in modules, it will disrupt the updater</b>"
-            )
+    elif os.path.exists(f"{os.path.abspath(os.getcwd())}/plugins/{mod}.py"):
+        await message.edit(
+            '<b>Запрещено удалять встроенные модули. Это может сломать Updater</b>'
+        )
 
-        else:
-            await message.edit(f"<b>Module <code>{mod}</code> not found</b>")
+
+    else:
+        await message.edit(f"<b>Модуль <code>{mod}</code> не найден</b>")
 
 
 @Client.on_message(filters.command(["loadallmods"], prefix) & filters.me)
 async def load_all_mods(clent: Client, message: Message):
-    await message.edit("<b>Fetching info...</b>")
+    await message.edit("<b>Получаю информацию...</b>")
     if not os.path.exists(f"{os.path.abspath(os.getcwd())}/plugins/custom_modules"):
         os.mkdir(f"{os.path.abspath(os.getcwd())}/plugins/custom_modules")
     modules_list = requests.get(
@@ -116,15 +118,15 @@ async def load_all_mods(clent: Client, message: Message):
             f'{os.path.abspath(os.getcwd())}/plugins/custom_modules/{module_info["name"]}'
         ):
             continue
-        new_modules.update({module_info["name"][:-3]: module_info["download_url"]})
-    if len(new_modules) == 0:
+        new_modules[module_info["name"][:-3]] = module_info["download_url"]
+    if not new_modules:
         return await message.edit("<b>All modules already loaded</b>")
-    await message.edit(f'<b>Loading new modules: {" ".join(new_modules.keys())}</b>')
+    await message.edit(f'<b>Загружаю новые модули: {" ".join(new_modules.keys())}</b>')
     for name, url in new_modules.items():
         with open(f"./plugins/custom_modules/{name}.py", "wb") as f:
             f.write(requests.get(url).content)
     await message.edit(
-        f'<b>Successfully loaded new modules: {" ".join(new_modules.keys())}</b>'
+        f'<b>Успшено загрузил новые модули: {" ".join(new_modules.keys())}</b>'
     )
     await restart()
 
@@ -133,11 +135,11 @@ modules_help.append(
     {
         "loader": [
             {
-                "loadmod [link]*": "Download module\nOnly modules from the official custom_modules repository and proven modules whose hashes are in modules_hashes.txt are supported"
+                "loadmod [link]*": "Скачать модуль\nПоддерживаются моды только из официального репозитория"
             },
-            {"unloadmod [module_name]*": "Delete module"},
-            {"modhash [link]*": "Get module hash by link"},
-            {"loadallmods": "Load all custom modules (use it at your own risk)"},
+            {"unloadmod [module_name]*": "Удалить модуль"},
+            {"modhash [link]*": "Получить хэш модуля по ссылке"},
+            {"loadallmods": "Загрузить все кастомные модули (на свой страх и риск)"},
         ]
     }
 )

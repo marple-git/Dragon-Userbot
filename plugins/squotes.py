@@ -61,7 +61,7 @@ async def quote_cmd(client: Client, message: types.Message):
 
     file_io = BytesIO(response.content)
     file_io.name = "sticker.png" if is_png else "sticker.webp"
-    await message.edit("<b>Sending...</b>")
+    await message.edit("<b>Отправляю...</b>")
 
     try:
         func = client.send_document if is_png else client.send_sticker
@@ -76,7 +76,7 @@ async def quote_cmd(client: Client, message: types.Message):
 @Client.on_message(filters.command(["fq", "fakequote"], prefix) & filters.me)
 async def fake_quote_cmd(client: Client, message: types.Message):
     if not message.reply_to_message:
-        return await message.edit("<b>Specify message for fake quote</b>")
+        return await message.edit("<b>Укажите сообщение для фейкового Quote</b>")
 
     is_png = "!png" in message.command or "!file" in message.command
     send_for_me = "!me" in message.command or "!ls" in message.command
@@ -121,12 +121,8 @@ async def fake_quote_cmd(client: Client, message: types.Message):
         )
 
     file_io = BytesIO(response.content)
-    if is_png:
-        file_io.name = "sticker.png"
-    else:
-        file_io.name = "sticker.webp"
-
-    await message.edit("<b>Sending...</b>")
+    file_io.name = "sticker.png" if is_png else "sticker.webp"
+    await message.edit("<b>Отправляю...</b>")
 
     try:
         func = client.send_document if is_png else client.send_sticker
@@ -268,7 +264,7 @@ def get_audio_text(audio: types.Audio) -> str:
 
 
 def get_reply_text(reply: types.Message) -> str:
-    text = (
+    return (
         "📷 Photo" + ("\n" + reply.caption if reply.caption else "")
         if reply.photo
         else get_reply_poll_text(reply.poll)
@@ -331,8 +327,6 @@ def get_reply_text(reply: types.Message) -> str:
         else reply.text or "unsupported message"
     )
 
-    return text
-
 
 def get_poll_text(poll: types.Poll) -> str:
     text = get_reply_poll_text(poll) + "\n"
@@ -351,16 +345,9 @@ def get_poll_text(poll: types.Poll) -> str:
 
 def get_reply_poll_text(poll: types.Poll) -> str:
     if poll.is_anonymous:
-        if poll.type == "regular":
-            text = "📊 Anonymous poll"
-        else:
-            text = "📊 Anonymous quiz"
+        text = "📊 Anonymous poll" if poll.type == "regular" else "📊 Anonymous quiz"
     else:
-        if poll.type == "regular":
-            text = "📊 Poll"
-        else:
-            text = "📊 Quiz"
-
+        text = "📊 Poll" if poll.type == "regular" else "📊 Quiz"
     if poll.is_closed:
         text += " (closed)"
 
@@ -376,7 +363,7 @@ def get_full_name(user: types.User) -> str:
 
 modules_help.append(
         {"squotes": [
-            {"q [reply]* [count] [args]": "Generate a quote\nAvailable args: !png — send a quote as png; !me — send a quote to saved messages; !noreply - make a quote without reply message"},
-            {"fq [reply]* [args] [text]": "Generate a fake quote"},
+            {"q [reply]* [count] [args]": "Создать цитату\nДоступные аргументы: !png — отправить как .png; !me — отправить в сохраненные сообщения; !noreply - создать цитату без реплая"},
+            {"fq [reply]* [args] [text]": "Создать фейковую цитату"},
         ]}
 )

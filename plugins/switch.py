@@ -17,7 +17,7 @@ async def switch(client: Client, message: Message):
             reply_text = str.translate(reply_text, change)
             await message.edit(reply_text)
         else:
-            message.edit("No text for switch")
+            await message.edit("No text for switch")
             await asyncio.sleep(3)
             await message.delete()
     else:
@@ -30,7 +30,7 @@ modules_help.append(
     {
         "switch": [
             {
-                "sw [reply]/[text for switch]*": "This is useful if you forgot to change the keyboard layout"
+                "sw [reply]/[text for switch]*": "Изменить раскладку клавиатуры"
             }
         ]
     }

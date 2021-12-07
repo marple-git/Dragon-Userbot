@@ -246,7 +246,7 @@ async def tmute_command(client: Client, message: Message):
         if message.reply_to_message.from_user:
             if not message.reply_to_message.from_user.is_self:
                 tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
-                if not message.reply_to_message.from_user.id in tmuted_users:
+                if message.reply_to_message.from_user.id not in tmuted_users:
                     tmuted_users.append(message.reply_to_message.from_user.id)
                     db.set("core.ats", f"c{message.chat.id}", tmuted_users)
                     await message.edit(
@@ -270,7 +270,7 @@ async def tmute_command(client: Client, message: Message):
                 user_to_tmute = await client.get_users(cause.split(" ")[1])
                 if not user_to_tmute.is_self:
                     tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
-                    if not user_to_tmute.id in tmuted_users:
+                    if user_to_tmute.id not in tmuted_users:
                         tmuted_users.append(user_to_tmute.id)
                         db.set("core.ats", f"c{message.chat.id}", tmuted_users)
                         await message.edit(
@@ -291,7 +291,7 @@ async def tmute_command(client: Client, message: Message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -302,7 +302,7 @@ async def tunmute_command(client: Client, message: Message):
         if message.reply_to_message.from_user:
             if not message.reply_to_message.from_user.is_self:
                 tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
-                if not message.reply_to_message.from_user.id in tmuted_users:
+                if message.reply_to_message.from_user.id not in tmuted_users:
                     await message.edit(
                         f"<b>{message.reply_to_message.from_user.first_name}</b> <code>not in tmute</code>"
                     )
@@ -327,7 +327,7 @@ async def tunmute_command(client: Client, message: Message):
                 user_to_tunmute = await client.get_users(cause.split(" ")[1])
                 if not user_to_tunmute.is_self:
                     tmuted_users = db.get("core.ats", f"c{message.chat.id}", [])
-                    if not user_to_tunmute.id in tmuted_users:
+                    if user_to_tunmute.id not in tmuted_users:
                         await message.edit(
                             f"<b>{user_to_tunmute.first_name}</b> <code>not in tmute</code>"
                         )
@@ -348,7 +348,7 @@ async def tunmute_command(client: Client, message: Message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -431,7 +431,7 @@ async def unmute_command(client, message):
                 await message.edit("<b>User is not found</b>")
         else:
             await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -463,8 +463,8 @@ async def mute_command(client: Client, message: Message):
                         * 604800
                         // 1
                     )
-        if mute_seconds > 30:
-            try:
+        try:
+            if mute_seconds > 30:
                 await client.restrict_chat_member(
                     message.chat.id,
                     message.reply_to_message.from_user.id,
@@ -478,41 +478,32 @@ async def mute_command(client: Client, message: Message):
                     "minutes": mute_seconds % 86400 % 3600 // 60,
                 }
                 message_text = (
-                    f"<b>{from_user.first_name}</b> <code> was muted for"
-                    f" {((str(mute_time['days']) + ' day') if mute_time['days'] > 0 else '') + ('s' if mute_time['days'] > 1 else '')}"
-                    f" {((str(mute_time['hours']) + ' hour') if mute_time['hours'] > 0 else '') + ('s' if mute_time['hours'] > 1 else '')}"
-                    f" {((str(mute_time['minutes']) + ' minute') if mute_time['minutes'] > 0 else '') + ('s' if mute_time['minutes'] > 1 else '')}</code>"
-                    + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                    f"<b>{from_user.first_name}</b> <code> был замучен"
+                    f" {((str(mute_time['days']) + ' дн.') if mute_time['days'] > 0 else '')}"
+                    f" {((str(mute_time['hours']) + ' ч.') if mute_time['hours'] > 0 else '')}"
+                    f" {((str(mute_time['minutes']) + ' мин.') if mute_time['minutes'] > 0 else '')}</code>"
+                    + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''} "
                 )
                 while "  " in message_text:
                     message_text = message_text.replace("  ", " ")
-                await message.edit(message_text)
-            except UserAdminInvalid:
-                await message.edit("<b>No rights</b>")
-            except ChatAdminRequired:
-                await message.edit("<b>No rights</b>")
-            except Exception as e:
-                print(e)
-                await message.edit("<b>No rights</b>")
-        else:
-            try:
+            else:
                 await client.restrict_chat_member(
                     message.chat.id,
                     message.reply_to_message.from_user.id,
                     ChatPermissions(),
                 )
                 message_text = (
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code> was muted for never</code>"
-                    + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
+                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code> был навсегда замучен</code>"
+                    + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
-                await message.edit(message_text)
-            except UserAdminInvalid:
-                await message.edit("<b>No rights</b>")
-            except ChatAdminRequired:
-                await message.edit("<b>No rights</b>")
-            except Exception as e:
-                print(e)
-                await message.edit("<b>No rights</b>")
+            await message.edit(message_text)
+        except UserAdminInvalid:
+            await message.edit("<b>Недостаточно прав</b>")
+        except ChatAdminRequired:
+            await message.edit("<b>Недостаточно прав</b>")
+        except Exception as e:
+            print(e)
+            await message.edit("<b>Недостаточно прав</b>")
     elif not message.reply_to_message and message.chat.type not in [
         "private",
         "channel",
@@ -548,8 +539,8 @@ async def mute_command(client: Client, message: Message):
                                 * 604800
                                 // 1
                             )
-                if mute_seconds > 30:
-                    try:
+                try:
+                    if mute_seconds > 30:
                         await client.restrict_chat_member(
                             message.chat.id,
                             user_to_unmute.id,
@@ -562,24 +553,15 @@ async def mute_command(client: Client, message: Message):
                             "minutes": mute_seconds % 86400 % 3600 // 60,
                         }
                         message_text = (
-                            f"<b>{user_to_unmute.first_name}</b> <code> was muted for"
-                            f" {((str(mute_time['days']) + ' day') if mute_time['days'] > 0 else '') + ('s' if mute_time['days'] > 1 else '')}"
-                            f" {((str(mute_time['hours']) + ' hour') if mute_time['hours'] > 0 else '') + ('s' if mute_time['hours'] > 1 else '')}"
-                            f" {((str(mute_time['minutes']) + ' minute') if mute_time['minutes'] > 0 else '') + ('s' if mute_time['minutes'] > 1 else '')}</code>"
-                            + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=3)[3] + '</i>' if len(cause.split()) > 3 else ''}"
+                            f"<b>{user_to_unmute.first_name}</b> <code> был замучен на"
+                            f" {((str(mute_time['days']) + ' дн.') if mute_time['days'] > 0 else '')}"
+                            f" {((str(mute_time['hours']) + ' ч.') if mute_time['hours'] > 0 else '')}"
+                            f" {((str(mute_time['minutes']) + ' м.') if mute_time['minutes'] > 0 else '')}</code>"
+                            + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=3)[3] + '</i>' if len(cause.split()) > 3 else ''}"
                         )
                         while "  " in message_text:
                             message_text = message_text.replace("  ", " ")
-                        await message.edit(message_text)
-                    except UserAdminInvalid:
-                        await message.edit("<b>No rights</b>")
-                    except ChatAdminRequired:
-                        await message.edit("<b>No rights</b>")
-                    except Exception as e:
-                        print(e)
-                        await message.edit("<b>No rights</b>")
-                else:
-                    try:
+                    else:
                         await client.restrict_chat_member(
                             message.chat.id, user_to_unmute.id, ChatPermissions()
                         )
@@ -587,23 +569,23 @@ async def mute_command(client: Client, message: Message):
                             f"<b>{user_to_unmute.first_name}</b> <code> was muted for never</code>"
                             + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                         )
-                        await message.edit(message_text)
-                    except UserAdminInvalid:
-                        await message.edit("<b>No rights</b>")
-                    except ChatAdminRequired:
-                        await message.edit("<b>No rights</b>")
-                    except Exception as e:
-                        print(e)
-                        await message.edit("<b>No rights</b>")
+                    await message.edit(message_text)
+                except UserAdminInvalid:
+                    await message.edit("<b>Недостаточно прав</b>")
+                except ChatAdminRequired:
+                    await message.edit("<b>Недостаточно прав</b>")
+                except Exception as e:
+                    print(e)
+                    await message.edit("<b>Недостаточно прав</b>")
             except PeerIdInvalid:
-                await message.edit("<b>User is not found</b>")
+                await message.edit("<b>Пользователь не найден</b>")
             except UsernameInvalid:
-                await message.edit("<b>User is not found</b>")
+                await message.edit("<b>Пользователь не найден</b>")
             except IndexError:
-                await message.edit("<b>User is not found</b>")
+                await message.edit("<b>Пользователь не найден</b>")
         else:
-            await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+            await message.edit("<b>Укажите ID или username/b>")
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -629,16 +611,16 @@ async def demote_command(client: Client, message: Message):
                     can_manage_voice_chats=False,
                 )
                 await message.edit(
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>demoted!</code>"
-                    + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
+                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>понижен!</code>"
+                    + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
             except UserAdminInvalid:
-                await message.edit("<b>No rights</b>")
+                await message.edit("<b>Недостаточно прав</b>")
             except ChatAdminRequired:
-                await message.edit("<b>No rights</b>")
+                await message.edit("<b>Недостаточно прав</b>")
             except Exception as e:
                 print(e)
-                await message.edit("<b>No rights</b>")
+                await message.edit("<b>Недостаточно прав</b>")
     elif not message.reply_to_message and message.chat.type not in [
         "private",
         "channel",
@@ -663,25 +645,25 @@ async def demote_command(client: Client, message: Message):
                         can_manage_voice_chats=False,
                     )
                     await message.edit(
-                        f"<b>{promote_user.first_name}</b> <code>demoted!</code>"
-                        + f"\n{'<b>Cause:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                        f"<b>{promote_user.first_name}</b> <code>понижен!</code>"
+                        + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
-                    await message.edit("<b>No rights</b>")
+                    await message.edit("<b>Недостаточно прав</b>")
                 except ChatAdminRequired:
-                    await message.edit("<b>No rights</b>")
+                    await message.edit("<b>Недостаточно прав</b>")
                 except Exception as e:
                     print(e)
-                    await message.edit("<b>No rights</b>")
+                    await message.edit("<b>Недостаточно прав</b>")
             except PeerIdInvalid:
-                await message.edit("<b>User is not found</b>")
+                await message.edit("<b>Пользователь не найден/b>")
             except UsernameInvalid:
-                await message.edit("<b>User is not found</b>")
+                await message.edit("<b>Пользователь не найден</b>")
             except IndexError:
-                await message.edit("<b>User is not found</b>")
+                await message.edit("<b>Пользователь не найден</b>")
         else:
-            await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+            await message.edit("<b>Укажите ID или username</b>")
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -706,16 +688,16 @@ async def promote_command(client: Client, message: Message):
                         cause.split(maxsplit=1)[1],
                     )
                 await message.edit(
-                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>promoted!</code>"
-                    + f"\n{'<b>Prefix:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
+                    f"<b>{message.reply_to_message.from_user.first_name}</b> <code>повышен!</code>"
+                    + f"\n{'<b>Префикс:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
             except UserAdminInvalid:
-                await message.edit("<b>No rights</b>")
+                await message.edit("<b>Недостаточно прав</b>")
             except ChatAdminRequired:
-                await message.edit("<b>No rights</b>")
+                await message.edit("<b>Недостаточно прав</b>")
             except Exception as e:
                 print(e)
-                await message.edit("<b>No rights</b>")
+                await message.edit("<b>Недостаточно прав</b>")
     elif not message.reply_to_message and message.chat.type not in [
         "private",
         "channel",
@@ -739,25 +721,25 @@ async def promote_command(client: Client, message: Message):
                             f"\n{cause.split(' ', maxsplit=2)[2] if len(cause.split()) > 2 else None}",
                         )
                     await message.edit(
-                        f"<b>{promote_user.first_name}</b> <code>promoted!</code>"
-                        + f"\n{'<b>Prefix:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
+                        f"<b>{promote_user.first_name}</b> <code>повышен!</code>"
+                        + f"\n{'<b>Префикс:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
-                    await message.edit("<b>No rights</b>")
+                    await message.edit("<b>Недостаточно прав</b>")
                 except ChatAdminRequired:
-                    await message.edit("<b>No rights</b>")
+                    await message.edit("<b>Недостаточно прав</b>")
                 except Exception as e:
                     print(e)
-                    await message.edit("<b>No rights</b>")
+                    await message.edit("<b>Недостаточно прав</b>")
             except PeerIdInvalid:
-                await message.edit("<b>User is not found</b>")
+                await message.edit("<b>Пользователь не найден</b>")
             except UsernameInvalid:
-                await message.edit("<b>User is not found</b>")
+                await message.edit("<b>Пользователь не найден</b>")
             except IndexError:
-                await message.edit("<b>User is not found</b>")
+                await message.edit("<b>Пользователь не найден</b>")
         else:
-            await message.edit("<b>user_id or username</b>")
-    elif message.chat.type in ["private", "channel"]:
+            await message.edit("<b>Укажите ID или username</b>")
+    else:
         await message.edit("<b>Unsupported</b>")
 
 
@@ -765,29 +747,29 @@ modules_help.append(
     {
         "admintool": [
             {
-                "ban [reply]/[userid]* [reason] [report_spam] [delete_history]": "ban user in chat"
+                "ban [reply]/[userid]* [reason] [report_spam] [delete_history]": "Забанить юзера в чате"
             },
             {
-                "unban [reply]/[userid]* [reason] [report_spam] [delete_history]": "unban user in chat"
+                "unban [reply]/[userid]* [reason] [report_spam] [delete_history]": "Разбанить юзера в чате"
             },
             {
-                "kick [reply]/[userid]* [reason] [report_spam] [delete_history]": "kick user out of chat"
+                "kick [reply]/[userid]* [reason] [report_spam] [delete_history]": "Кикнуть юзера из чата"
             },
             {
-                "tmute [reply]/[userid]* [reason]": "delete all new messages from user in chat"
+                "tmute [reply]/[userid]* [reason]": "Удалить все новые сообщения от юзера из чата"
             },
             {
-                "tunmute [reply]/[userid]* [reason]": "stop deleting all new messages from user in chat"
+                "tunmute [reply]/[userid]* [reason]": "Прекратить удалять все новые сообщения от юзера из чата"
             },
             {
-                "tmute_users": "cheklist all users, whose messages will be deleted in chat"
+                "tmute_users": "Список пользователей, чьи сообщения автоматически удаляются"
             },
             {
-                "mute [reply]/[userid]* [reason] [1m]/[1h]/[1d]/[1w]": "mute user in chat"
+                "mute [reply]/[userid]* [reason] [1m]/[1h]/[1d]/[1w]": "Замутить пользователя в чате"
             },
-            {"unmute [reply]/[userid]* [reason]": "unmute user in chat"},
-            {"promote [reply]/[userid]* [prefix]": "promote user in chat"},
-            {"demote [reply]/[userid]* [reason]": "demote user in chat"},
+            {"unmute [reply]/[userid]* [reason]": "Размутить юзера в чате"},
+            {"promote [reply]/[userid]* [prefix]": "Повысить юзера в чате"},
+            {"demote [reply]/[userid]* [reason]": "Понизить юзера в чате"},
         ]
     }
 )

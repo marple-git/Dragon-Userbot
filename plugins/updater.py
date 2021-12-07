@@ -51,9 +51,9 @@ modules_help.append(
     {
         "updater": [
             {
-                "update": "Updating the userbot. If new modules are available，they will be installed"
+                "update": "Обновляем юзербота. Установка новых модулей, если они появились."
             },
-            {"restart": "Restart userbot"},
+            {"restart": "Перезагрузить юзербота"},
         ]
     }
 )

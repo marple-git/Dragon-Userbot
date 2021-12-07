@@ -29,5 +29,5 @@ async def switch(client: Client, message: Message):
 
 
 modules_help.append(
-    {"translate": [{"tr [reply]/[text for translate]*": "message translator"}]}
+    {"translate": [{"tr [reply]/[text for translate]*": "переводчик сообщения"}]}
 )

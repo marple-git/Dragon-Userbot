@@ -18,7 +18,7 @@ async def convert(client: Client, message: Message):
 
         if name == "btc":
             name = "1₿"
-            link = f"https://ru.investing.com/crypto/bitcoin"
+            link = 'https://ru.investing.com/crypto/bitcoin'
         else:
             link = f"https://ru.investing.com/currencies/{name}-rub"
 
@@ -27,14 +27,14 @@ async def convert(client: Client, message: Message):
         rub = soup.find("span", id="last_last")
         await message.edit(f"<b>{name} сейчас стоит </b><code> {rub} </code><b> руб</b>")
     except:
-        await message.edit("<code>ERROR</code>")
+        await message.edit("<code>Ошибка</code>")
 
 
 modules_help.append(
     {
         "course": [
             {
-                "course [currency]*": "Конвертен в рубли из любой валюты\nНе использовать чаще 10 раз в минуту"
+                "course [валюта]*": "Конвертер в рубли из любой валюты\nНе использовать чаще 10 раз в минуту"
             }
         ]
     }

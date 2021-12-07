@@ -48,16 +48,16 @@ async def weather(client: Client, message: Message):
 async def set_weather_city(client: Client, message: Message):
     try:
         db.set("core.weather", "city", message.command[1])
-        await message.edit("<code>City set-upped.</code>")
+        await message.edit("<code>Город установлен.</code>")
     except:
-        await message.edit("<code>Error occured.</code>")
+        await message.edit("<code>Произошла ошибка.</code>")
 
 
 @Client.on_message(filters.command("w", prefix) & filters.me)
 async def w(client: Client, message: Message):
     try:
         city = db.get("core.weather", "city", "Moscow")
-        await message.edit("```Processing the request...```")
+        await message.edit("```Обрабатываю запрос...```")
         r = requests.get(f"https://wttr.in/{city}?m?M?0?q?T&lang=en")
         await message.edit(f"```City: {r.text}```")
         await client.send_document(
@@ -67,7 +67,7 @@ async def w(client: Client, message: Message):
         )
         os.remove(f"{city}.png")
     except:
-        await message.edit("<code>Error occured</code>")
+        await message.edit("<code>Произошла ошибка</code>")
         await asyncio.sleep(5)
         await message.delete()
 
@@ -75,9 +75,9 @@ async def w(client: Client, message: Message):
 modules_help.append(
     {
         "weather": [
-            {"weather [city]*": "Get the weather in the selected city"},
-            {"set_weather_city [city]*": "Set city for w command"},
-            {"w": "Quick access to setted city (Moscow if nothing was set)"},
+            {"weather [city]*": "Узнать погоду в выбранном городе"},
+            {"set_weather_city [city]*": "Установить город для команды"},
+            {"w": "Быстрый доступ к заданному городу (Москва по дефолту)"},
         ]
     }
 )

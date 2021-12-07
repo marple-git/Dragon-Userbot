@@ -32,7 +32,7 @@ modules_help.append(
     {
         "type": [
             {
-                "type [text]*": "Typing emulation\nDon't use for a lot of characters. Your account may be banned!"
+                "type [text]*": "Эмуляция печатания\nНе используйте много символов. Возможна блокировка аккаунта!"
             }
         ]
     }

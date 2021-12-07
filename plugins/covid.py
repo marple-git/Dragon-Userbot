@@ -9,19 +9,19 @@ from covid import Covid
 @Client.on_message(filters.command("covid", prefix) & filters.me)
 async def covid_local(client: Client, message: Message):
     region = " ".join(message.command[1:])
-    await message.edit("<code>Data retrieval...</code>")
+    await message.edit("<code>Получение данных...</code>")
     covid = Covid(source="worldometers")
     try:
         local_status = covid.get_status_by_country_name(region)
         await message.edit(
-            "<b>=======🦠 COVID-19 STATUS 🦠=======</b>\n"
+            "<b>=======🦠 COVID-19 Статистика 🦠=======</b>\n"
             + f"<b>Регион</b>: <code>{local_status['country']}</code>\n"
             + "<b>====================================</b>\n"
             + f"<b>🤧 Новых случаев</b>: <code>{local_status['new_cases']}</code>\n"
             + f"<b>😷 Новых смертей</b>: <code>{local_status['new_deaths']}</code>\n"
             + "<b>====================================</b>\n"
             + f"<b>😷 Подтверждено</b>: <code>{local_status['confirmed']}</code>\n"
-            + f"<b>❗️ Активно:</b> <code>{local_status['active']}</code>\n"
+            + f"<b>❗️ Заражённых:</b> <code>{local_status['active']}</code>\n"
             + f"<b>⚠️ Критичные</b>: <code>{local_status['critical']}</code>\n"
             + f"<b>💀 Смерти</b>: <code>{local_status['deaths']}</code>\n"
             + f"<b>🚑 Излечение</b>: <code>{local_status['recovered']}</code>\n"
@@ -47,7 +47,7 @@ modules_help.append(
         "covid": [
             {"covid [region]*": "Получить статистику"},
             {
-                "regions": "Available regions]\n=======================\n[Worldometer.info statistics are used"
+                "regions": "Отобразить возможные регионы"
             },
         ]
     }

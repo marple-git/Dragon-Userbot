@@ -12,5 +12,5 @@ async def say(client: Client, message: Message):
 
 
 modules_help.append(
-    {"say": [{"say [command]*": "Show the command to the interlocutor"}]}
+    {"say": [{"say [command]*": "Показать команду собеседнику"}]}
 )

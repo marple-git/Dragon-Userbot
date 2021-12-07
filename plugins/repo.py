@@ -7,7 +7,7 @@ from .utils.utils import modules_help, prefix
 @Client.on_message(filters.command("repo", prefix) & filters.me)
 async def repo(client: Client, message: Message):
     await message.edit(
-        f"""<b>---Dragon-Userbot---
+        f"""<b>---Dragon-Userbot [Modded]---
 • Userbot on{utils.github}
 • License: {utils.license}
 • Copyright: {utils.copyright}
@@ -18,4 +18,4 @@ async def repo(client: Client, message: Message):
     )
 
 
-utils.modules_help.append({"repo": [{"repo": "Userbot information"}]})
+utils.modules_help.append({"repo": [{"repo": "Информация о юзерботе"}]})

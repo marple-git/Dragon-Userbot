@@ -7,7 +7,7 @@ import asyncio
 @Client.on_message(filters.command(["leave_chat", "lc"], prefix) & filters.me)
 async def leave_chat(client: Client, message: Message):
     if message.chat.type in ["group", "supergroup"]:
-        await message.edit("<code>Прощай...</code>")
+        await message.edit("<code>Я погнал, мужики...</code>")
         await asyncio.sleep(3)
         await client.leave_chat(chat_id=message.chat.id)
     else:

@@ -46,10 +46,10 @@ async def save_note(client: Client, message: Message):
                 }
                 db.set("core.notes", f"note{note_name}", note)
                 await message.edit(
-                    f"Note {message.text.split(' ', maxsplit=1)[1]} saved"
+                    f"Записка {message.text.split(' ', maxsplit=1)[1]} сохранена"
                 )
             else:
-                await message.edit("This note already exists")
+                await message.edit("Эта запись уже существует")
         else:
             cheking_note = db.get("core.notes", f"note{note_name}", False)
             if not cheking_note:
@@ -61,19 +61,19 @@ async def save_note(client: Client, message: Message):
                 }
                 db.set("core.notes", f"note{note_name}", note)
                 await message.edit(
-                    f"Note {message.text.split(' ', maxsplit=1)[1]} saved"
+                    f"Записка {message.text.split(' ', maxsplit=1)[1]} Сохранена"
                 )
             else:
-                await message.edit("This note already exists")
+                await message.edit("Эта запись уже существует")
     else:
         await message.edit(
-            f"Example: <code>{prefix}save name note</code> Reply on user message"
+            f"Пример: <code>{prefix}save название записки</code> Ответ на сообщение пользователя"
         )
 
 
 @Client.on_message(filters.command(["note"], prefix) & filters.me)
 async def note_send(client: Client, message: Message):
-    await message.edit("<code>Loading...</code>")
+    await message.edit("<code>Загрузка...</code>")
     if len(message.text.split()) >= 2:
         note_name = f"{message.text.split(' ', maxsplit=1)[1]}"
         find_note = db.get("core.notes", f"note{note_name}", False)
@@ -105,17 +105,16 @@ async def note_send(client: Client, message: Message):
                                 media_grouped_list.append(
                                     InputMediaVideo(_.video.file_id, _.caption.markdown)
                                 )
+                        elif _.video.thumbs:
+                            media_grouped_list.append(
+                                InputMediaVideo(
+                                    _.video.file_id, _.video.thumbs[0].file_id
+                                )
+                            )
                         else:
-                            if _.video.thumbs:
-                                media_grouped_list.append(
-                                    InputMediaVideo(
-                                        _.video.file_id, _.video.thumbs[0].file_id
-                                    )
-                                )
-                            else:
-                                media_grouped_list.append(
-                                    InputMediaVideo(_.video.file_id)
-                                )
+                            media_grouped_list.append(
+                                InputMediaVideo(_.video.file_id)
+                            )
                     elif _.audio:
                         if _.caption:
                             media_grouped_list.append(
@@ -139,17 +138,16 @@ async def note_send(client: Client, message: Message):
                                         _.document.file_id, _.caption.markdown
                                     )
                                 )
+                        elif _.document.thumbs:
+                            media_grouped_list.append(
+                                InputMediaDocument(
+                                    _.document.file_id, _.document.thumbs[0].file_id
+                                )
+                            )
                         else:
-                            if _.document.thumbs:
-                                media_grouped_list.append(
-                                    InputMediaDocument(
-                                        _.document.file_id, _.document.thumbs[0].file_id
-                                    )
-                                )
-                            else:
-                                media_grouped_list.append(
-                                    InputMediaDocument(_.document.file_id)
-                                )
+                            media_grouped_list.append(
+                                InputMediaDocument(_.document.file_id)
+                            )
                 if message.reply_to_message:
                     await client.send_media_group(
                         message.chat.id,
@@ -158,32 +156,30 @@ async def note_send(client: Client, message: Message):
                     )
                 else:
                     await client.send_media_group(message.chat.id, media_grouped_list)
-                await message.delete()
+            elif message.reply_to_message:
+                await client.copy_message(
+                    message.chat.id,
+                    int(find_note["CHAT_ID"]),
+                    int(find_note["MESSAGE_ID"]),
+                    reply_to_message_id=message.reply_to_message.message_id,
+                )
             else:
-                if message.reply_to_message:
-                    await client.copy_message(
-                        message.chat.id,
-                        int(find_note["CHAT_ID"]),
-                        int(find_note["MESSAGE_ID"]),
-                        reply_to_message_id=message.reply_to_message.message_id,
-                    )
-                else:
-                    await client.copy_message(
-                        message.chat.id,
-                        int(find_note["CHAT_ID"]),
-                        int(find_note["MESSAGE_ID"]),
-                    )
-                await message.delete()
+                await client.copy_message(
+                    message.chat.id,
+                    int(find_note["CHAT_ID"]),
+                    int(find_note["MESSAGE_ID"]),
+                )
+            await message.delete()
         else:
-            await message.edit("There is no such note")
+            await message.edit("Записка не найдена")
     else:
-        await message.edit(f"Example: <code>{prefix}note name note</code>")
+        await message.edit(f"Пример: <code>{prefix}note название записки</code>")
 
 
 @Client.on_message(filters.command(["notes"], prefix) & filters.me)
 async def notes(client: Client, message: Message):
-    await message.edit("<code>Loading...</code>")
-    text = "Available notes\n\n"
+    await message.edit("<code>Загрузка...</code>")
+    text = "Доступные записки:\n\n"
     clct = db.get_collection("core.notes")
     for note in clct:
         note = list(note.keys())[0]
@@ -194,26 +190,26 @@ async def notes(client: Client, message: Message):
 
 @Client.on_message(filters.command(["clear"], prefix) & filters.me)
 async def clear_note(client: Client, message: Message):
-    await message.edit("<code>Loading...</code>")
+    await message.edit("<code>Загрузка...</code>")
     if len(message.text.split()) >= 2:
         note_name = f"{message.text.split(' ', maxsplit=1)[1]}"
         find_note = db.get("core.notes", f"note{note_name}", False)
         if find_note:
             db.remove("core.notes", f"note{note_name}")
-            await message.edit(f"Note {note_name} deleted")
+            await message.edit(f"Записка {note_name} удалена")
         else:
-            await message.edit("There is no such note")
+            await message.edit("Нет такой записки")
     else:
-        await message.edit(f"Example: <code>{prefix}clear name note</code>")
+        await message.edit(f"Пример: <code>{prefix}clear название записки</code>")
 
 
 modules_help.append(
     {
         "notes": [
-            {"save [name note]*": "Reply on user message"},
-            {"note [name note]*": "Cheking note"},
-            {"notes": "Cheking notes"},
-            {"clear [name note]*": "Delete note"},
+            {"save [name note]*": "Ответить на сообщение пользователя"},
+            {"note [name note]*": "Проверяем записку"},
+            {"notes": "Проверяем записки"},
+            {"clear [name note]*": "Удалить записку"},
         ]
     }
 )
