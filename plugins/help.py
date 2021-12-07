@@ -9,7 +9,7 @@ async def help(client, message: Message):
     module_name = " ".join(message.command[1:])
     if module_name == "":
         messages = [
-            f"""<b>Help for <a href="https://t.me/Dragon_Userbot_chat">Dragon-Userbot</a></b>\n<b>Для помощи по модулю введите </b> <code>{prefix}help [module]</code>\n\n<b>Доступные модули:</b>\n"""
+            f"""<b>Помощь по <a href="https://t.me/Dragon_Userbot_chat">Dragon-Userbot</a></b>\n<b>Для помощи по модулю введите </b> <code>{prefix}help [module]</code>\n\n<b>Доступные модули:</b>\n"""
         ]
         msg_cnt = 0
         for mod in modules_help:
