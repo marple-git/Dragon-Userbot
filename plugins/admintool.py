@@ -391,7 +391,7 @@ async def unmute_command(client, message):
                 )
                 await message.edit(
                     f"<b>{message.reply_to_message.from_user.first_name}</b> <code>размучен</code>"
-                    + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else 'не указана'}"
+                    + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
             except UserAdminInvalid:
                 await message.edit("<b>Недостаточно прав</b>")
@@ -416,7 +416,7 @@ async def unmute_command(client, message):
                     )
                     await message.edit(
                         f"<b>{user_to_unmute.first_name}</b> <code>размучен!</code>"
-                        + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else 'не указана'}"
+                        + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                     )
                 except UserAdminInvalid:
                     await message.edit("<b>Недостаточно прав</b>")
@@ -484,7 +484,7 @@ async def mute_command(client: Client, message: Message):
                     f" {((str(mute_time['days']) + ' дн.') if mute_time['days'] > 0 else '')}"
                     f" {((str(mute_time['hours']) + ' ч.') if mute_time['hours'] > 0 else '')}"
                     f" {((str(mute_time['minutes']) + ' мин.') if mute_time['minutes'] > 0 else '')}</code>"
-                    + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else 'не указана'} "
+                    + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''} "
                 )
                 while "  " in message_text:
                     message_text = message_text.replace("  ", " ")
@@ -496,7 +496,7 @@ async def mute_command(client: Client, message: Message):
                 )
                 message_text = (
                     f"<b>{message.reply_to_message.from_user.first_name}</b> <code> был навсегда замучен</code>"
-                    + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else 'не указана'}"
+                    + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=1)[1] + '</i>' if len(cause.split()) > 1 else ''}"
                 )
             await message.edit(message_text)
         except UserAdminInvalid:
@@ -559,7 +559,7 @@ async def mute_command(client: Client, message: Message):
                             f" {((str(mute_time['days']) + ' дн.') if mute_time['days'] > 0 else '')}"
                             f" {((str(mute_time['hours']) + ' ч.') if mute_time['hours'] > 0 else '')}"
                             f" {((str(mute_time['minutes']) + ' м.') if mute_time['minutes'] > 0 else '')}</code>"
-                            + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=3)[3] + '</i>' if len(cause.split()) > 3 else 'не указана'}"
+                            + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=3)[3] + '</i>' if len(cause.split()) > 3 else ''}"
                         )
                         while "  " in message_text:
                             message_text = message_text.replace("  ", " ")
@@ -569,7 +569,7 @@ async def mute_command(client: Client, message: Message):
                         )
                         message_text = (
                             f"<b>{user_to_unmute.first_name}</b> <code> был навсегда замучен</code>"
-                            + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else 'не указана'}"
+                            + f"\n{'<b>Причина:</b> <i>' + cause.split(' ', maxsplit=2)[2] + '</i>' if len(cause.split()) > 2 else ''}"
                         )
                     await message.edit(message_text)
                 except UserAdminInvalid:
