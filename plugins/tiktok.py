@@ -8,6 +8,8 @@ from .utils.utils import modules_help, prefix
 @Client.on_message(filters.command("tt", prefix) & filters.me)
 async def tiktok(client: Client, message: Message):
     await message.edit('<i>Загрузка...</i>')
+    if not message.reply_to_message:
+        return await message.edit('<i>Эта команда работает только при ответе на сообщение</i>')
     await client.send_message('@ttlessbot', '/start')
     await asyncio.sleep(.5)
     await client.send_message('@ttlessbot', message.reply_to_message.text)
