@@ -18,13 +18,6 @@ async def tiktok(client: Client, message: Message):
     messages = await client.get_history("@ttlessbot")
     video = messages[1].video.file_id
     await message.delete()
-    await client.send(
-        functions.messages.DeleteHistory(
-            peer=await client.resolve_peer(1959655963),
-            max_id=0,
-            just_clear=True,
-        )
-    )
     await client.send_video(message.chat.id, video)
 
 
