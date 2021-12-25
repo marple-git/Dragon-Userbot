@@ -13,9 +13,10 @@ async def tiktok(client: Client, message: Message):
     await client.send_message('@ttlessbot', '/start')
     await asyncio.sleep(.5)
     await client.send_message('@ttlessbot', message.reply_to_message.text)
-    await asyncio.sleep(3)
+    await asyncio.sleep(4)
     async with asyncio.Lock():
         async for message in client.search_messages(chat_id='ttlessbot', limit=2):
+            await message.edit(message[0])
             video = message[0].video.file_id
     await message.delete()
     await client.send_video(message.chat.id, video)
